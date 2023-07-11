@@ -29,6 +29,20 @@ const postCheckin = async (req, res) => {
     const { userId, longitude, latitude, address, picture } = req.body
     let imageUrl = ''
 
+    const checkIfAlereadyCheckin = await prisma.checkin.findFirst({
+        where: {
+            userId
+        }
+    })
+
+    if (checkIfAlereadyCheckin) {
+        res.json({
+            message: "You already checkin today",
+            isCheckin: true
+        })
+        return
+    }
+
     try {
         imageUrl = await uploadImage(picture)
     } catch (error) {
