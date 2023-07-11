@@ -11,11 +11,24 @@ datasource db {
 }
 
 model User {
-  id         String   @id @unique @default(uuid())
-  email      String   @unique
+  id         String    @id @unique @default(uuid())
+  email      String    @unique
   name       String?
   picture    String?
   credential String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  checkins   Checkin[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Checkin {
+  id        String   @id @unique @default(uuid())
+  userId    String
+  user      User?    @relation(fields: [userId], references: [id])
+  latitude  Float?
+  longitude Float?
+  address   String?
+  picture   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
