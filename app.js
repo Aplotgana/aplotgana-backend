@@ -4,6 +4,7 @@ const logger = require('morgan')
 const cors = require("cors")
 
 const usersRouter = require('./routes/users')
+const checkinRouter = require('./routes/checkin')
 
 var app = express();
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api/users', usersRouter);
+app.use('/api/checkin', checkinRouter);
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
