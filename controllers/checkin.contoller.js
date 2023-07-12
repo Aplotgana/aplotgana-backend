@@ -83,7 +83,6 @@ const postCheckin = async (req, res) => {
 const getCheckinToday = async (req, res) => {
     const userId = req.params.id
     const currentDate = new Date();
-    const beginningOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0, 0);
 
     try {
         const response = await prisma.user.findFirst({
@@ -94,6 +93,9 @@ const getCheckinToday = async (req, res) => {
                 checkins: {
                     where: {
                         status: true
+                    },
+                    include: {
+                        catatans: true
                     }
                 }
             }
