@@ -22,14 +22,26 @@ model User {
 }
 
 model Checkin {
-  id        String   @id @unique @default(uuid())
+  id        String             @id @unique @default(uuid())
   userId    String
-  user      User?    @relation(fields: [userId], references: [id])
+  user      User?              @relation(fields: [userId], references: [id])
   latitude  Float?
   longitude Float?
   address   String?
   picture   String?
   status    Boolean?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  catatans  catatanAktifitas[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model catatanAktifitas {
+  id            String   @id @unique @default(uuid())
+  checkinId     String?
+  checkin       Checkin? @relation(fields: [checkinId], references: [id])
+  deskripsi     String?
+  nama_pelapor  String?
+  nomor_pelapor String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
