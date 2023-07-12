@@ -29,6 +29,7 @@ model Checkin {
   longitude Float?
   address   String?
   picture   String?
+  status    Boolean?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -31,7 +31,8 @@ const postCheckin = async (req, res) => {
 
     const checkIfAlereadyCheckin = await prisma.checkin.findFirst({
         where: {
-            userId
+            userId,
+            status: true
         }
     })
 
@@ -60,7 +61,8 @@ const postCheckin = async (req, res) => {
                 longitude,
                 latitude,
                 address,
-                picture: imageUrl
+                picture: imageUrl,
+                status: true
             }
         })
 
@@ -84,19 +86,18 @@ const getCheckinToday = async (req, res) => {
     const beginningOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0, 0);
 
     try {
-        const response = await prisma.user.findFirstOrThrow({
+        const response = await prisma.user.findFirst({
             where: {
                 id: userId
             },
             include: {
                 checkins: {
                     where: {
-                        createdAt: {
-                            gte: beginningOfDay
-                        }
+                        status: true
                     }
                 }
             }
+
         })
 
         res.status(200).json({
