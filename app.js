@@ -5,6 +5,7 @@ const cors = require("cors")
 
 const usersRouter = require('./routes/users')
 const checkinRouter = require('./routes/checkin')
+const catatanRouter = require('./routes/catatan')
 
 var app = express();
 
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 app.use('/api/users', usersRouter);
 app.use('/api/checkin', checkinRouter);
+app.use('/api/catatan', catatanRouter)
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {
