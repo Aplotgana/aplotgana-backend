@@ -40,7 +40,7 @@ model catatanAktifitas {
   checkinId     String?
   checkin       Checkin? @relation(fields: [checkinId], references: [id])
   deskripsi     String?
-  nama_pelapor  String?
+  nama_pelapor  String
   nomor_pelapor String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
