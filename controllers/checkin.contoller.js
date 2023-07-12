@@ -79,6 +79,31 @@ const postCheckin = async (req, res) => {
 
 }
 
+const postCheckout = async (req, res) => {
+    const checkinId = req.params.id
+
+    try {
+        const reponse = await prisma.checkin.update({
+            where: {
+                id: checkinId
+            },
+            data: {
+                status: false
+            }
+        })
+
+        res.status(200).json({
+            message: "Checkout success",
+            data: reponse
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Checkout failed",
+            error: error.message
+        })
+    }
+
+}
 
 const getCheckinToday = async (req, res) => {
     const userId = req.params.id
@@ -119,4 +144,4 @@ const getCheckinToday = async (req, res) => {
 }
 
 
-module.exports = { postCheckin, getCheckinToday }
+module.exports = { postCheckin, getCheckinToday, postCheckout }
