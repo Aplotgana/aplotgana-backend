@@ -65,4 +65,28 @@ const getUser = async (req, res) => {
     }
 }
 
-module.exports = { user, getUser }
+const getAbsen = async (req, res) => {
+
+    try {
+        const response = await prisma.checkin.findMany({
+            where: {
+                userId: req.params.id
+            },
+            include: {
+                catatans: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+
+        })
+
+        res.status(200).json({
+            response
+        })
+    } catch (error) {
+        res.json(error)
+    }
+}
+
+module.exports = { user, getUser, getAbsen }
