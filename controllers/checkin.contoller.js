@@ -81,6 +81,14 @@ const postCheckin = async (req, res) => {
 
 const postCheckout = async (req, res) => {
     const checkinId = req.params.id
+    const picture_keluar = req.body.picture_keluar
+    let imageUrl = ''
+
+    try {
+        imageUrl = await uploadImage(picture_keluar)
+    } catch (error) {
+        console.log(error.message)
+    }
 
     try {
         const reponse = await prisma.checkin.update({
@@ -88,7 +96,8 @@ const postCheckout = async (req, res) => {
                 id: checkinId
             },
             data: {
-                status: false
+                status: false,
+                picture_keluar: imageUrl
             }
         })
 

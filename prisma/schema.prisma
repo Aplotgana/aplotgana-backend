@@ -10,29 +10,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// The `model User` defines the structure and properties of the `User` entity in the database.
 model User {
-  id         String    @id @unique @default(uuid())
-  email      String    @unique
-  name       String?
-  picture    String?
-  credential String?
-  checkins   Checkin[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id          String    @id @unique @default(uuid())
+  email       String    @unique
+  name        String?
+  picture     String?
+  credential  String?
+  password    String?
+  role        String?   @default("USER")
+  checkins    Checkin[]
+  inboxes     Inbox[]
+  isOtorisasi Boolean?  @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Checkin {
-  id        String             @id @unique @default(uuid())
-  userId    String
-  user      User?              @relation(fields: [userId], references: [id])
-  latitude  Float?
-  longitude Float?
-  address   String?
-  picture   String?
-  status    Boolean?
-  catatans  catatanAktifitas[]
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  id             String             @id @unique @default(uuid())
+  userId         String
+  user           User?              @relation(fields: [userId], references: [id])
+  latitude       Float?
+  longitude      Float?
+  address        String?
+  picture        String?
+  picture_keluar String?
+  otorisasi      Boolean?           @default(false)
+  status         Boolean?
+  catatans       catatanAktifitas[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  InboxAdmin     InboxAdmin[]
 }
 
 model catatanAktifitas {
@@ -44,4 +52,27 @@ model catatanAktifitas {
   nomor_pelapor String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model Inbox {
+  id        String   @id @unique @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  title     String?
+  message   String?
+  flag      Boolean? @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InboxAdmin {
+  id          String   @id @unique @default(uuid())
+  checkInId   String?
+  inboxUserId String?
+  checkIn     Checkin? @relation(fields: [checkInId], references: [id])
+  title       String?
+  message     String?
+  isReaded    Boolean? @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
