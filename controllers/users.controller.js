@@ -40,6 +40,8 @@ const user = async (req, res) => {
                 name,
                 email,
                 credential,
+                kontak,
+                nip,
                 picture
             }
         })
@@ -54,8 +56,14 @@ const user = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
+    const userId = req.params.id
+
     try {
-        const response = await prisma.user.findMany()
+        const response = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
 
         res.status(200).json({
             response
@@ -63,6 +71,33 @@ const getUser = async (req, res) => {
     } catch (error) {
         res.json(error)
     }
+}
+
+const updateUser = async (req, res) => {
+    const { userId, name, kontak, nip } = req.body
+
+    try {
+        const response = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                name,
+                kontak,
+                nip
+            }
+        })
+
+        res.json({
+            status: 'success',
+            response
+        })
+
+        console.log(response)
+    } catch (error) {
+        res.json(error)
+    }
+
 }
 
 const getAbsen = async (req, res) => {
@@ -89,4 +124,4 @@ const getAbsen = async (req, res) => {
     }
 }
 
-module.exports = { user, getUser, getAbsen }
+module.exports = { user, getUser, getAbsen, updateUser }

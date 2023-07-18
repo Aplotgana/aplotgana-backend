@@ -129,8 +129,9 @@ const getCheckinToday = async (req, res) => {
                         status: true
                     },
                     include: {
-                        catatans: true
-                    }
+                        catatans: true,
+                        user: true
+                    },
                 }
             }
 

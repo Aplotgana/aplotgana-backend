@@ -5,17 +5,28 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
     const userId = req.params.inboxAdminId
     const inboxId = req.params.inboxUserId
 
-    const { status } = req.body
+    const { status, user_id } = req.body
 
 
     if (status === 'tolak') {
 
-        const update = await prisma.checkin.update({
+
+        await prisma.checkin.update({
             where: {
                 id: checkinId
             },
             data: {
-                otorisasi: false,
+                otorisasi: false
+            }
+        })
+
+
+        await prisma.user.update({
+            where: {
+                id: user_id,
+            },
+            data: {
+                isOtorisasi: false
             }
         })
 
@@ -45,11 +56,8 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
 
         res.status(200).json({
             message: "Otorisasi ditolak",
-            data: update
         })
     } else if (status === 'setuju') {
-
-
         try {
 
             const update = await prisma.checkin.update({
@@ -137,66 +145,66 @@ const postOtorisasi = async (req, res) => {
     const inboxAdminId = req.params.inboxAdminId
     const { user_id } = req.body
 
-    try {
+    // try {
 
-        const checkin = await prisma.checkin.update({
-            where: {
-                id: checkinId
-            },
-            data: {
-                otorisasi: true
-            }
-        })
-
-
-        await prisma.user.update({
-            where: {
-                id: user_id,
-            },
-            data: {
-                isOtorisasi: true
-            }
-        })
-
-        const adminBox = await prisma.inboxAdmin.update({
-            where: {
-                id: inboxAdminId
-            },
-            data: {
-                isReaded: false,
-                title: "Anda telah menyutujui Otorisasi",
-                message: "Anda telah menyutujui Otorisasi, silahkan cek kembali Activity yang telah ditambahkan oleh user.",
-                updatedAt: new Date()
-            }
-        })
-
-        const userBox = await prisma.inbox.update({
-            where: {
-                id: inboxId
-            },
-            data: {
-                flag: true,
-                title: "Selamat! Akun anda berhasil terotorisasi.",
-                message: "Klik disini untuk tambah Activity sekarang.",
-                updatedAt: new Date()
-            }
-        })
+    const checkin = await prisma.checkin.update({
+        where: {
+            id: checkinId
+        },
+        data: {
+            otorisasi: true
+        }
+    })
 
 
-        res.status(200).json({
-            message: "Otorisasi diterima",
-            data: {
-                checkin,
-                adminBox,
-                userBox
-            }
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: "Otorisasi failed",
-            error: error.message
-        })
-    }
+    await prisma.user.update({
+        where: {
+            id: user_id,
+        },
+        data: {
+            isOtorisasi: true
+        }
+    })
+
+    const adminBox = await prisma.inboxAdmin.update({
+        where: {
+            id: inboxAdminId
+        },
+        data: {
+            isReaded: false,
+            title: "Anda telah menyutujui Otorisasi",
+            message: "Anda telah menyutujui Otorisasi, silahkan cek kembali Activity yang telah ditambahkan oleh user.",
+            updatedAt: new Date()
+        }
+    })
+
+    const userBox = await prisma.inbox.update({
+        where: {
+            id: inboxId
+        },
+        data: {
+            flag: true,
+            title: "Selamat! Akun anda berhasil terotorisasi.",
+            message: "Klik disini untuk tambah Activity sekarang.",
+            updatedAt: new Date()
+        }
+    })
+
+
+    res.status(200).json({
+        message: "Otorisasi diterima",
+        data: {
+            checkin,
+            adminBox,
+            userBox
+        }
+    })
+    // } catch (error) {
+    //     res.status(500).json({
+    //         message: "Otorisasi failed",
+    //         error: error.message
+    //     })
+    // }
 }
 
 const postNewOtorisasi = async (req, res) => {

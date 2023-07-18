@@ -21,6 +21,8 @@ model User {
   role        String?   @default("USER")
   checkins    Checkin[]
   inboxes     Inbox[]
+  kontak      String?
+  nip         String?
   isOtorisasi Boolean?  @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

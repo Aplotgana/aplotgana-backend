@@ -23,6 +23,6 @@
   "devDependencies": {
     "eslint": "^8.44.0",
     "nodemon": "^3.0.1",
-    "prisma": "^4.16.2"
+    "prisma": "^5.0.0"
   }
 }
