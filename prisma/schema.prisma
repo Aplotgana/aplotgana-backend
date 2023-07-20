@@ -12,20 +12,23 @@ datasource db {
 
 // The `model User` defines the structure and properties of the `User` entity in the database.
 model User {
-  id          String    @id @unique @default(uuid())
-  email       String    @unique
-  name        String?
-  picture     String?
-  credential  String?
-  password    String?
-  role        String?   @default("USER")
-  checkins    Checkin[]
-  inboxes     Inbox[]
-  kontak      String?
-  nip         String?
-  isOtorisasi Boolean?  @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String          @id @unique @default(uuid())
+  email         String          @unique
+  name          String?
+  picture       String?
+  credential    String?
+  password      String?
+  role          String?         @default("USER")
+  checkins      Checkin[]
+  inboxes       Inbox[]
+  kontak        String?
+  nip           String?
+  isOtorisasi   Boolean?        @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  Collaborator  Collaborator[]
+  Equipment     Equipment[]
+  EquipmentItem EquipmentItem[]
 }
 
 model Checkin {
@@ -43,6 +46,56 @@ model Checkin {
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   InboxAdmin     InboxAdmin[]
+  Collaborator   Collaborator[]
+  Equipment      Equipment[]
+  EquipmentItem  EquipmentItem[]
+}
+
+model Collaborator {
+  id        String    @id @unique @default(uuid())
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
+  checkinId String?
+  checkin   Checkin?  @relation(fields: [checkinId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  rekanans  Rekanan[]
+}
+
+model Equipment {
+  id            String          @id @unique @default(uuid())
+  userId        String?
+  user          User?           @relation(fields: [userId], references: [id])
+  checkinId     String?
+  checkin       Checkin?        @relation(fields: [checkinId], references: [id])
+  nama          String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  EquipmentItem EquipmentItem[]
+}
+
+model EquipmentItem {
+  id          String     @id @unique @default(uuid())
+  userId      String?
+  user        User?      @relation(fields: [userId], references: [id])
+  checkinId   String?
+  checkin     Checkin?   @relation(fields: [checkinId], references: [id])
+  equipmentId String?
+  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
+  nama        String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Rekanan {
+  id             String        @id @unique @default(uuid())
+  collaboratorId String?
+  collaborator   Collaborator? @relation(fields: [collaboratorId], references: [id])
+  deskripsi      String?
+  nama_rekan     String
+  nomor_rekan    String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model catatanAktifitas {

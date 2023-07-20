@@ -8,6 +8,8 @@ const checkinRouter = require('./routes/checkin')
 const catatanRouter = require('./routes/catatan')
 const otorisasiRouter = require('./routes/otorisasi')
 const inboxRouter = require('./routes/inbox')
+const collabRouter = require('./routes/collaborator')
+const equipRouter = require('./routes/equipment')
 
 var app = express();
 
@@ -22,6 +24,8 @@ app.use('/api/checkin', checkinRouter);
 app.use('/api/catatan', catatanRouter)
 app.use('/api/otorisasi', otorisasiRouter)
 app.use('/api/inbox', inboxRouter)
+app.use('/api/rekanan', collabRouter)
+app.use('/api/equipment', equipRouter)
 
 // catch 404 and forward to error handler
 // app.use(function (req, res, next) {

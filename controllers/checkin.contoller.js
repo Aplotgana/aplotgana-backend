@@ -66,6 +66,20 @@ const postCheckin = async (req, res) => {
             }
         })
 
+        await prisma.collaborator.create({
+            data: {
+                checkinId: response.id,
+                userId: userId
+            }
+        })
+
+        await prisma.equipment.create({
+            data: {
+                checkinId: response.id,
+                userId: userId
+            }
+        })
+
         res.status(200).json({
             message: "Checkin success",
             data: response
@@ -130,11 +144,20 @@ const getCheckinToday = async (req, res) => {
                     },
                     include: {
                         catatans: true,
-                        user: true
-                    },
-                }
+                        user: true,
+                        Collaborator: {
+                            include: {
+                                rekanans: true
+                            }
+                        },
+                        Equipment: {
+                            include: {
+                                EquipmentItem: true
+                            }
+                        }
+                    }
+                },
             }
-
         })
 
         res.status(200).json({

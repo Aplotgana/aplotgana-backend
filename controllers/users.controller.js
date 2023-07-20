@@ -4,7 +4,6 @@ const user = async (req, res) => {
     const { name, email, credential, picture } = req.body
 
     try {
-
         // check if user already exists
         const user = await prisma.user.findUnique({
             where: {
@@ -28,10 +27,10 @@ const user = async (req, res) => {
                     status: 'success',
                     data: responseUpdate
                 })
+
                 return
             } catch (error) {
                 res.json(error)
-                return
             }
         }
 
@@ -40,8 +39,6 @@ const user = async (req, res) => {
                 name,
                 email,
                 credential,
-                kontak,
-                nip,
                 picture
             }
         })
