@@ -121,4 +121,30 @@ const getAbsen = async (req, res) => {
     }
 }
 
-module.exports = { user, getUser, getAbsen, updateUser }
+const postPilihTim = async (req, res) => {
+    const { userId, tim, name, kontak, kontakDarurat, kemampuan } = req.body
+
+    try {
+        const response = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                tim,
+                name,
+                kontak,
+                kontakDarurat,
+                kemampuan
+            }
+        })
+
+        res.status(200).json({
+            status: 'success',
+            response
+        })
+    } catch (error) {
+        res.json(error)
+    }
+}
+
+module.exports = { user, getUser, getAbsen, updateUser, postPilihTim }

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `kemampuan` VARCHAR(191) NULL,
+    ADD COLUMN `kontakDarurat` VARCHAR(191) NULL,
+    ADD COLUMN `tim` VARCHAR(191) NULL;
