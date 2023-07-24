@@ -113,14 +113,36 @@ model catatanAktifitas {
 }
 
 model Inbox {
-  id        String   @id @unique @default(uuid())
+  id        String      @id @unique @default(uuid())
   userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
+  user      User?       @relation(fields: [userId], references: [id])
   title     String?
   message   String?
-  flag      Boolean? @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  flag      Boolean?    @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  InboxType InboxType[]
+}
+
+model InboxType {
+  id               String   @id @unique @default(uuid())
+  inboxId          String?
+  inbox            Inbox?   @relation(fields: [inboxId], references: [id])
+  type             Type     @default(PEMBERITAHUAN)
+  sandi_operasi    String?
+  penanggung_jawab String?
+  deskripsi        String?
+  status           String?
+  longitude        String?
+  latitude         String?
+  address          String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+enum Type {
+  NOTIFIKASI
+  PEMBERITAHUAN
 }
 
 model InboxAdmin {

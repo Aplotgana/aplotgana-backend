@@ -47,5 +47,29 @@ const getInboxAdmin = async (req, res) => {
     }
 }
 
+const getPengumuman = async (req, res) => {
+    try {
+        const response = await prisma.inbox.findMany({
+            where: {
+                userId: null,
+                flag: true
+            },
+            include: {
+                InboxType: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
 
-module.exports = { getInboxUser, getInboxAdmin }
+        res.json({
+            status: 'success',
+            data: response
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+module.exports = { getInboxUser, getInboxAdmin, getPengumuman }

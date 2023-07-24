@@ -11,6 +11,7 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
     if (status === 'tolak') {
 
 
+        // update otorisasi di checkin
         await prisma.checkin.update({
             where: {
                 id: checkinId
@@ -21,6 +22,7 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
         })
 
 
+        // update otorisasi di user
         await prisma.user.update({
             where: {
                 id: user_id,
@@ -30,6 +32,7 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
             }
         })
 
+        // update title dan message di inbox admin
         await prisma.inboxAdmin.update({
             where: {
                 id: userId
@@ -42,6 +45,7 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
             }
         })
 
+        // update title dan message di inbox user
         await prisma.inbox.update({
             where: {
                 id: inboxId
@@ -60,6 +64,7 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
     } else if (status === 'setuju') {
         try {
 
+            // update otorisasi di checkin
             const update = await prisma.checkin.update({
                 where: {
                     id: checkinId
@@ -69,6 +74,7 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
                 }
             })
 
+            // update title dan message di inbox admin
             await prisma.inboxAdmin.update({
                 where: {
                     id: userId
@@ -86,6 +92,8 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
                 data: update
             })
 
+
+            // update title dan message di inbox user
             await prisma.inbox.update({
                 where: {
                     id: userId
@@ -103,6 +111,9 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
             console.log(error)
         }
     } else {
+        // membuat inbox baru
+
+        // title dan message untuk user
         try {
             const inboxUser = await prisma.inbox.create({
                 data: {
@@ -112,6 +123,7 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
                 }
             })
 
+            // title dan message untuk admin
             const response = await prisma.inboxAdmin.create({
                 data: {
                     inboxUserId: inboxUser.id,

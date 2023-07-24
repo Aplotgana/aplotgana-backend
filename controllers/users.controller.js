@@ -147,4 +147,41 @@ const postPilihTim = async (req, res) => {
     }
 }
 
-module.exports = { user, getUser, getAbsen, updateUser, postPilihTim }
+const postInformasi = async (req, res) => {
+    const { address, deskripsi, latitude, longitude, penanggung_jawab, sandi_operasi, status, userId } = req.body
+
+    console.log(req.body)
+    // return
+    // post to inbox user
+    const inboxUser = await prisma.inbox.create({
+        data: {
+            title: "Pengumuman Penting!",
+            message: "Klik disini untuk melihat detail pengumuman.",
+            flag: true
+        }
+    })
+
+    try {
+        const response = await prisma.inboxType.create({
+            data: {
+                inboxId: inboxUser.id,
+                address,
+                deskripsi,
+                latitude,
+                longitude,
+                penanggung_jawab,
+                sandi_operasi,
+                status
+            }
+        })
+
+        res.status(200).json({
+            status: 'success',
+            response
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = { user, getUser, getAbsen, updateUser, postPilihTim, postInformasi }
