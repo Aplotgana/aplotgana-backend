@@ -82,8 +82,8 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
                 data: {
                     updatedAt: new Date(),
                     isReaded: false,
-                    title: 'Anda telah menyutujui Otorisasi',
-                    message: 'Anda telah menyutujui Otorisasi, silahkan cek kembali Activity yang telah ditambahkan oleh user.',
+                    title: 'Anda telah menyetujui Otorisasi',
+                    message: 'Anda telah menyetujui Otorisasi, silahkan cek kembali Activity yang telah ditambahkan oleh user.',
                 }
             })
 
@@ -184,8 +184,8 @@ const postOtorisasi = async (req, res) => {
         },
         data: {
             isReaded: false,
-            title: "Anda telah menyutujui Otorisasi",
-            message: "Anda telah menyutujui Otorisasi, silahkan cek kembali Activity yang telah ditambahkan oleh user.",
+            title: "Anda telah menyetujui Otorisasi",
+            message: "Anda telah menyetujui Otorisasi, silahkan cek kembali Activity yang telah ditambahkan oleh user.",
             updatedAt: new Date()
         }
     })

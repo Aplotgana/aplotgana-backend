@@ -11,7 +11,8 @@ const cloudinary = require("../services/cloudinary.service")
 async function uploadImage(imagePath) {
     const options = {
         unique_filename: true,
-        overwrite: false
+        overwrite: false,
+        folder: 'aplotgana',
     }
 
     try {
