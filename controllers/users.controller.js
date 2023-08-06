@@ -105,7 +105,18 @@ const getAbsen = async (req, res) => {
                 userId: req.params.id
             },
             include: {
-                catatans: true
+                catatans: true,
+                Equipment: {
+                    include: {
+                        EquipmentItem: true
+                    }
+                },
+                Collaborator: {
+                    include: {
+                        rekanans: true
+                    },
+                },
+                LocationRecord: true
             },
             orderBy: {
                 createdAt: 'desc'
