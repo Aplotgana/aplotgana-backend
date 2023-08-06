@@ -12,26 +12,27 @@ datasource db {
 
 // The `model User` defines the structure and properties of the `User` entity in the database.
 model User {
-  id            String          @id @unique @default(uuid())
-  email         String          @unique
-  name          String?
-  picture       String?
-  credential    String?
-  password      String?
-  role          String?         @default("USER")
-  checkins      Checkin[]
-  inboxes       Inbox[]
-  kontak        String?
-  nip           String?
-  tim           String?
-  kontakDarurat String?
-  kemampuan     String?
-  isOtorisasi   Boolean?        @default(false)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  Collaborator  Collaborator[]
-  Equipment     Equipment[]
-  EquipmentItem EquipmentItem[]
+  id             String           @id @unique @default(uuid())
+  email          String           @unique
+  name           String?
+  picture        String?
+  credential     String?
+  password       String?
+  role           String?          @default("USER")
+  checkins       Checkin[]
+  inboxes        Inbox[]
+  kontak         String?
+  nip            String?
+  tim            String?
+  kontakDarurat  String?
+  kemampuan      String?
+  isOtorisasi    Boolean?         @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Collaborator   Collaborator[]
+  Equipment      Equipment[]
+  EquipmentItem  EquipmentItem[]
+  LocationRecord LocationRecord[]
 }
 
 model Checkin {
@@ -52,6 +53,7 @@ model Checkin {
   Collaborator   Collaborator[]
   Equipment      Equipment[]
   EquipmentItem  EquipmentItem[]
+  LocationRecord LocationRecord[]
 }
 
 model Collaborator {
@@ -155,4 +157,17 @@ model InboxAdmin {
   isReaded    Boolean? @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model LocationRecord {
+  id        String   @id @unique @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  checkinId String?
+  checkin   Checkin? @relation(fields: [checkinId], references: [id])
+  latitude  Float?
+  longitude Float?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
