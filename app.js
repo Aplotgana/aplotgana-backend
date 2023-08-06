@@ -10,6 +10,7 @@ const otorisasiRouter = require('./routes/otorisasi')
 const inboxRouter = require('./routes/inbox')
 const collabRouter = require('./routes/collaborator')
 const equipRouter = require('./routes/equipment')
+const locationRouter = require('./routes/location')
 
 var app = express();
 
@@ -26,22 +27,7 @@ app.use('/api/otorisasi', otorisasiRouter)
 app.use('/api/inbox', inboxRouter)
 app.use('/api/rekanan', collabRouter)
 app.use('/api/equipment', equipRouter)
-
-// catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//   next(createError(404));
-// });
-
-// // error handler
-// app.use(function (err, req, res) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
+app.use('/api/location', locationRouter)
 
 app.listen(process.env.PORT || 3000, function () {
   console.log('Server running...');
