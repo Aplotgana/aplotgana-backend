@@ -67,6 +67,16 @@ const postCheckin = async (req, res) => {
             }
         })
 
+        await prisma.locationRecord.create({
+            data: {
+                checkinId: response.id,
+                userId: userId,
+                longitude,
+                latitude,
+                address
+            }
+        })
+
         await prisma.collaborator.create({
             data: {
                 checkinId: response.id,
@@ -112,7 +122,8 @@ const postCheckout = async (req, res) => {
             },
             data: {
                 status: false,
-                picture_keluar: imageUrl
+                picture_keluar: imageUrl,
+                updatedAt: new Date()
             }
         })
 
