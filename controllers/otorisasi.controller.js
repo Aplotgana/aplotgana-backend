@@ -1,4 +1,5 @@
 const prisma = require('../services/prisma.service')
+const webpush = require('web-push')
 
 const postOtorisasiToInboxAdmin = async (req, res) => {
     const checkinId = req.params.checkinid
@@ -202,6 +203,43 @@ const postOtorisasi = async (req, res) => {
         }
     })
 
+    // Fetch the list of push subscription objects from your database
+    const subscriptions = await prisma.pushSubscription.findMany({
+        where: {
+            userId: user_id,
+            role: 'USER'
+        },
+        select: {
+            endpoint: true,
+            p256dh: true,
+            auth: true,
+        },
+    });
+
+    const payload = JSON.stringify({
+        title: 'Aplotgana',
+        body: 'Selamat akun anda telah terotorisasi, silahkan tambah activity sekarang!',
+        data: {
+            url: 'http://localhost:5173/inbox'
+        }
+    });
+
+    for (const subscription of subscriptions) {
+        const pushSubscription = {
+            endpoint: subscription.endpoint,
+            keys: {
+                p256dh: subscription.p256dh,
+                auth: subscription.auth,
+            },
+        };
+
+        try {
+            await webpush.sendNotification(pushSubscription, payload);
+            console.log('Push notification sent successfully:', subscription.endpoint);
+        } catch (error) {
+            console.error('Error sending push notification:', error);
+        }
+    }
 
     res.status(200).json({
         message: "Otorisasi diterima",
@@ -241,12 +279,50 @@ const postNewOtorisasi = async (req, res) => {
             }
         })
 
+        // Fetch the list of push subscription objects from your database
+        const subscriptions = await prisma.pushSubscription.findMany(
+            {
+                where: {
+                    role: 'ADMIN'
+                },
+                select: {
+                    endpoint: true,
+                    p256dh: true,
+                    auth: true,
+                },
+            });
+
+        const payload = JSON.stringify({
+            title: 'Aplotgana',
+            body: 'Hi Admin, Ada permintaan otorisasi baru dari user, silahkan cek sekarang.',
+            data: {
+                url: 'http://localhost:5173/inbox'
+            }
+        });
+
+        for (const subscription of subscriptions) {
+            const pushSubscription = {
+                endpoint: subscription.endpoint,
+                keys: {
+                    p256dh: subscription.p256dh,
+                    auth: subscription.auth,
+                },
+            };
+
+            try {
+                await webpush.sendNotification(pushSubscription, payload);
+                console.log('Push notification sent successfully:', subscription.endpoint);
+            } catch (error) {
+                console.error('Error sending push notification:', error);
+            }
+        }
 
         res.status(200).json({
             message: "Permintaan success",
             data: response,
             inboxUser
         })
+
 
     } catch (error) {
         console.log(error)

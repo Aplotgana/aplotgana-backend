@@ -1,4 +1,5 @@
 const prisma = require('../services/prisma.service')
+const webpush = require('web-push')
 
 const user = async (req, res) => {
     const { name, email, credential, picture } = req.body
@@ -185,6 +186,43 @@ const postInformasi = async (req, res) => {
                 status
             }
         })
+
+        // Fetch the list of push subscription objects from your database
+        const subscriptions = await prisma.pushSubscription.findMany({
+            where: {
+                role: 'USER'
+            },
+            select: {
+                endpoint: true,
+                p256dh: true,
+                auth: true,
+            },
+        });
+
+        const payload = JSON.stringify({
+            title: 'Aplotgana',
+            body: 'Pengumuman Penting! Cek inbox anda untuk melihat detail pengumuman.',
+            data: {
+                url: '/inbox'
+            }
+        });
+
+        for (const subscription of subscriptions) {
+            const pushSubscription = {
+                endpoint: subscription.endpoint,
+                keys: {
+                    p256dh: subscription.p256dh,
+                    auth: subscription.auth,
+                },
+            };
+
+            try {
+                await webpush.sendNotification(pushSubscription, payload);
+                console.log('Push notification sent successfully:', subscription.endpoint);
+            } catch (error) {
+                console.error('Error sending push notification:', error);
+            }
+        }
 
         res.status(200).json({
             status: 'success',

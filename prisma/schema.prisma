@@ -171,3 +171,12 @@ model LocationRecord {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model PushSubscription {
+  id       Int     @id @default(autoincrement())
+  userId   String?
+  role     String? @default("USER")
+  endpoint String  @db.VarChar(512)
+  p256dh   String?
+  auth     String?
+}
