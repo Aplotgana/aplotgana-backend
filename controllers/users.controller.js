@@ -203,7 +203,7 @@ const postInformasi = async (req, res) => {
             title: 'Aplotgana',
             body: 'Pengumuman Penting! Cek inbox anda untuk melihat detail pengumuman.',
             data: {
-                url: '/inbox'
+                url: 'https://aplotgana.id/inbox'
             }
         });
 

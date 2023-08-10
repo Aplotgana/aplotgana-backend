@@ -59,6 +59,44 @@ const postOtorisasiToInboxAdmin = async (req, res) => {
             }
         })
 
+        // Fetch the list of push subscription objects from your database
+        const subscriptions = await prisma.pushSubscription.findMany({
+            where: {
+                userId: user_id,
+                role: 'USER'
+            },
+            select: {
+                endpoint: true,
+                p256dh: true,
+                auth: true,
+            },
+        });
+
+        const payload = JSON.stringify({
+            title: 'Aplotgana',
+            body: 'Mohon Maaf! Otorisasi Akun Anda ditolak.',
+            data: {
+                url: 'https://aplotgana.id/inbox'
+            }
+        });
+
+        for (const subscription of subscriptions) {
+            const pushSubscription = {
+                endpoint: subscription.endpoint,
+                keys: {
+                    p256dh: subscription.p256dh,
+                    auth: subscription.auth,
+                },
+            };
+
+            try {
+                await webpush.sendNotification(pushSubscription, payload);
+                console.log('Push notification sent successfully:', subscription.endpoint);
+            } catch (error) {
+                console.error('Error sending push notification:', error);
+            }
+        }
+
         res.status(200).json({
             message: "Otorisasi ditolak",
         })
@@ -220,7 +258,7 @@ const postOtorisasi = async (req, res) => {
         title: 'Aplotgana',
         body: 'Selamat akun anda telah terotorisasi, silahkan tambah activity sekarang!',
         data: {
-            url: 'http://localhost:5173/inbox'
+            url: 'https://aplotgana.id/inbox'
         }
     });
 
@@ -296,7 +334,7 @@ const postNewOtorisasi = async (req, res) => {
             title: 'Aplotgana',
             body: 'Hi Admin, Ada permintaan otorisasi baru dari user, silahkan cek sekarang.',
             data: {
-                url: 'http://localhost:5173/inbox'
+                url: 'https://aplotgana.id/inbox'
             }
         });
 
