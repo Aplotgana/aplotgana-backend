@@ -1,16 +1,31 @@
 const prisma = require('../services/prisma.service')
 
 const postEquipment = async (req, res) => {
-    const { userId, checkinId, equipmentId, nama } = req.body
-
-    console.log(userId, checkinId, equipmentId, nama)
+    const { userId, checkinId, equipmentId, nama, locationRecordId } = req.body
 
     try {
         const response = await prisma.equipmentItem.create({
             data: {
-                userId,
-                checkinId,
-                equipmentId,
+                user: {
+                    connect: {
+                        id: userId
+                    }
+                },
+                checkin: {
+                    connect: {
+                        id: checkinId
+                    }
+                },
+                LocationRecord: {
+                    connect: {
+                        id: locationRecordId
+                    }
+                },
+                equipment: {
+                    connect: {
+                        id: equipmentId
+                    }
+                },
                 nama
             }
         })
@@ -20,7 +35,7 @@ const postEquipment = async (req, res) => {
             data: response
         })
     } catch (error) {
-        res.json(error)
+        console.log(error)
     }
 
 }
