@@ -1,7 +1,7 @@
 const prisma = require('../services/prisma.service')
 
 const postCatatan = async (req, res) => {
-    const { checkinId, deskripsi, nama_pelapor, nomor_pelapor } = req.body
+    const { checkinId, deskripsi, nama_pelapor, nomor_pelapor, locationRecordId } = req.body
 
     try {
         const response = await prisma.catatanAktifitas.create({
@@ -9,6 +9,11 @@ const postCatatan = async (req, res) => {
                 checkin: {
                     connect: {
                         id: checkinId
+                    }
+                },
+                LocationRecord: {
+                    connect: {
+                        id: locationRecordId
                     }
                 },
                 deskripsi,
@@ -22,9 +27,7 @@ const postCatatan = async (req, res) => {
             data: response
         })
     } catch (error) {
-        res.status(500).json({
-            message: "Catatan gagal ditambahkan",
-        })
+      console.log(error)
     }
 }
 

@@ -91,7 +91,6 @@ const updateUser = async (req, res) => {
             response
         })
 
-        console.log(response)
     } catch (error) {
         res.json(error)
     }
@@ -106,15 +105,27 @@ const getAbsen = async (req, res) => {
                 userId: req.params.id
             },
             include: {
-                catatans: true,
+                catatans: {
+                    include: {
+                        LocationRecord: true
+                    }
+                },
                 Equipment: {
                     include: {
-                        EquipmentItem: true
+                        EquipmentItem: {
+                            include: {
+                                LocationRecord: true
+                            }
+                        }
                     }
                 },
                 Collaborator: {
                     include: {
-                        rekanans: true
+                        rekanans: {
+                            include: {
+                                LocationRecord: true
+                            }
+                        }
                     },
                 },
                 LocationRecord: true
@@ -162,7 +173,6 @@ const postPilihTim = async (req, res) => {
 const postInformasi = async (req, res) => {
     const { address, deskripsi, latitude, longitude, penanggung_jawab, sandi_operasi, status, userId } = req.body
 
-    console.log(req.body)
     // return
     // post to inbox user
     const inboxUser = await prisma.inbox.create({

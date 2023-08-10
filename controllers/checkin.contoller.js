@@ -155,16 +155,22 @@ const getCheckinToday = async (req, res) => {
                         status: true
                     },
                     include: {
-                        catatans: true,
+                        LocationRecord: {
+                            include: {
+                                Rekanans: true,
+                                EquipmentItems: true,
+                                catatanAktifitas: true,
+                            },
+                            orderBy: {
+                                createdAt: 'desc'
+                            }
+                        },
                         user: true,
+                        EquipmentItem: true,
+                        Equipment: true,
                         Collaborator: {
                             include: {
                                 rekanans: true
-                            }
-                        },
-                        Equipment: {
-                            include: {
-                                EquipmentItem: true
                             }
                         }
                     }

@@ -57,61 +57,71 @@ model Checkin {
 }
 
 model Collaborator {
-  id        String    @id @unique @default(uuid())
-  userId    String?
-  user      User?     @relation(fields: [userId], references: [id])
-  checkinId String?
-  checkin   Checkin?  @relation(fields: [checkinId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  rekanans  Rekanan[]
+  id               String          @id @unique @default(uuid())
+  userId           String?
+  user             User?           @relation(fields: [userId], references: [id])
+  checkinId        String?
+  locationRecordId String?
+  LocationRecord   LocationRecord? @relation(fields: [locationRecordId], references: [id])
+  checkin          Checkin?        @relation(fields: [checkinId], references: [id])
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  rekanans         Rekanan[]
 }
 
 model Equipment {
-  id            String          @id @unique @default(uuid())
-  userId        String?
-  user          User?           @relation(fields: [userId], references: [id])
-  checkinId     String?
-  checkin       Checkin?        @relation(fields: [checkinId], references: [id])
-  nama          String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  EquipmentItem EquipmentItem[]
+  id               String          @id @unique @default(uuid())
+  userId           String?
+  locationRecordId String?
+  LocationRecord   LocationRecord? @relation(fields: [locationRecordId], references: [id])
+  user             User?           @relation(fields: [userId], references: [id])
+  checkinId        String?
+  checkin          Checkin?        @relation(fields: [checkinId], references: [id])
+  nama             String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  EquipmentItem    EquipmentItem[]
 }
 
 model EquipmentItem {
-  id          String     @id @unique @default(uuid())
-  userId      String?
-  user        User?      @relation(fields: [userId], references: [id])
-  checkinId   String?
-  checkin     Checkin?   @relation(fields: [checkinId], references: [id])
-  equipmentId String?
-  equipment   Equipment? @relation(fields: [equipmentId], references: [id])
-  nama        String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id               String          @id @unique @default(uuid())
+  userId           String?
+  user             User?           @relation(fields: [userId], references: [id])
+  locationRecordId String?
+  LocationRecord   LocationRecord? @relation(fields: [locationRecordId], references: [id])
+  checkinId        String?
+  checkin          Checkin?        @relation(fields: [checkinId], references: [id])
+  equipmentId      String?
+  equipment        Equipment?      @relation(fields: [equipmentId], references: [id])
+  nama             String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
 model Rekanan {
-  id             String        @id @unique @default(uuid())
-  collaboratorId String?
-  collaborator   Collaborator? @relation(fields: [collaboratorId], references: [id])
-  deskripsi      String?
-  nama_rekan     String
-  nomor_rekan    String?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id               String          @id @unique @default(uuid())
+  collaboratorId   String?
+  collaborator     Collaborator?   @relation(fields: [collaboratorId], references: [id])
+  locationRecordId String?
+  LocationRecord   LocationRecord? @relation(fields: [locationRecordId], references: [id])
+  deskripsi        String?
+  nama_rekan       String
+  nomor_rekan      String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
 model catatanAktifitas {
-  id            String   @id @unique @default(uuid())
-  checkinId     String?
-  checkin       Checkin? @relation(fields: [checkinId], references: [id])
-  deskripsi     String?
-  nama_pelapor  String
-  nomor_pelapor String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id               String          @id @unique @default(uuid())
+  checkinId        String?
+  checkin          Checkin?        @relation(fields: [checkinId], references: [id])
+  locationRecordId String?
+  LocationRecord   LocationRecord? @relation(fields: [locationRecordId], references: [id])
+  deskripsi        String?
+  nama_pelapor     String?
+  nomor_pelapor    String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
 model Inbox {
@@ -160,16 +170,21 @@ model InboxAdmin {
 }
 
 model LocationRecord {
-  id        String   @id @unique @default(uuid())
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
-  checkinId String?
-  checkin   Checkin? @relation(fields: [checkinId], references: [id])
-  latitude  Float?
-  longitude Float?
-  address   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String             @id @unique @default(uuid())
+  userId           String?
+  user             User?              @relation(fields: [userId], references: [id])
+  checkinId        String?
+  checkin          Checkin?           @relation(fields: [checkinId], references: [id])
+  latitude         Float?
+  longitude        Float?
+  address          String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  Equipments       Equipment[]
+  EquipmentItems   EquipmentItem[]
+  catatanAktifitas catatanAktifitas[]
+  Rekanans         Rekanan[]
+  Collaborators    Collaborator[]
 }
 
 model PushSubscription {
