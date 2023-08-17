@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
 const webpush = require('web-push')
-const { user, getUser, getAbsen, updateUser, postPilihTim, postInformasi } = require('../controllers/users.controller')
+const { user, getUser, getAbsen, updateUser, postPilihTim, postInformasi, getAllUsers } = require('../controllers/users.controller')
 const prisma = require('../services/prisma.service')
 
 /* GET users listing. */
 router.post('/', user);
 router.get('/get/:id', getUser);
 router.get('/getAbsen/:id', getAbsen)
+router.get('/getUsers', getAllUsers)
 router.post('/update', updateUser)
 router.post('/pilihTim', postPilihTim)
 router.post('/informasi', postInformasi)
@@ -16,7 +17,7 @@ router.post('/subscribe', async (req, res) => {
   constant. In this case, it is assuming that the request body contains the subscription details for
   a web push notification. The subscription details typically include information such as the
   endpoint URL, the public key, and the authentication token. */
-  const {userId, subscription, role} = req.body
+  const { userId, subscription, role } = req.body
 
   try {
     // Check if the subscription already exists based on endpoint, p256dh, and auth
@@ -36,7 +37,7 @@ router.post('/subscribe', async (req, res) => {
       return;
 
     } else {
-      
+
       const newSubscription = await prisma.pushSubscription.create({
         data: {
           userId: userId,

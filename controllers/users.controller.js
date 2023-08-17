@@ -243,4 +243,20 @@ const postInformasi = async (req, res) => {
     }
 }
 
-module.exports = { user, getUser, getAbsen, updateUser, postPilihTim, postInformasi }
+const getAllUsers = async (req, res) => {
+    try {
+        const response = await prisma.user.findMany({
+            where: {
+                role: 'USER'
+            }
+        })
+
+        res.status(200).json({
+            response
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = { user, getUser, getAbsen, updateUser, postPilihTim, postInformasi, getAllUsers }
