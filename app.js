@@ -25,6 +25,7 @@ webpush.setVapidDetails(
   privateVapidKey
 );
 
+app.options('*', cors())
 app.use(bodyParser.json());
 app.use(cors())
 app.use(logger('dev'));
